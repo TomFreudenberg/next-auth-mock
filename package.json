@@ -1,9 +1,13 @@
 {
   "name": "@tomfreudenberg/next-auth-mock",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": false,
   "description": "Next-Auth mockup provider for jest, storybook and others.",
   "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./storybook": "./src/storybook"
+  },
   "scripts": {
     "test": "test"
   },
@@ -22,5 +26,12 @@
   "bugs": {
     "url": "https://github.com/TomFreudenberg/next-auth-mock/issues"
   },
-  "homepage": "https://github.com/TomFreudenberg/next-auth-mock#readme"
+  "homepage": "https://github.com/TomFreudenberg/next-auth-mock#readme",
+  "dependencies": {
+    "next-auth": "4.12.2",
+    "prop-types": "15.8.1",
+    "react": "18.2.0"
+  },
+  "devDependencies": {
+  }
 }
