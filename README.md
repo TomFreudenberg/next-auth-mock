@@ -110,7 +110,7 @@ const withAuthProvider = (Story, context) => {
   );
 };
 
-export const decorators = [withAppProviders];
+export const decorators = [withAuthProvider];
 ```
 
 <br>
