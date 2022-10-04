@@ -1,0 +1,26 @@
+{
+  "name": "@tomfreudenberg/next-auth-mock",
+  "version": "0.0.1",
+  "private": false,
+  "description": "Next-Auth mockup provider for jest, storybook and others.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TomFreudenberg/next-auth-mock.git"
+  },
+  "keywords": [
+    "nextauth",
+    "extjs",
+    "react",
+    "nodejs"
+  ],
+  "author": "Tom Freudenberg",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TomFreudenberg/next-auth-mock/issues"
+  },
+  "homepage": "https://github.com/TomFreudenberg/next-auth-mock#readme"
+}
