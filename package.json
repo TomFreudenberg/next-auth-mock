@@ -1,6 +1,6 @@
 {
   "name": "@tomfreudenberg/next-auth-mock",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "description": "Next-Auth mockup provider for jest, storybook and others.",
   "main": "src/index.js",
