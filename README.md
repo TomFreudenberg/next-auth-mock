@@ -192,7 +192,7 @@ SigninPageStory.parameters = {};
 
 You may find, use and download the npm package on [npmjs.com](https://npmjs.com/package/@tomfreudenberg/next-auth-mock).
 
-[![npm Version](https://badge.fury.io/js/@tomfreudenberg%2Fnext-auth-mock.svg)](https://badge.fury.io/js/@tomfreudenberg%2Fnext-auth-mock) &nbsp;
+[![npm Version](https://img.shields.io/npm/v/@tomfreudenberg/next-auth-mock?style=for-the-badge)](https://npmjs.com/package/@tomfreudenberg/next-auth-mock) &nbsp;
 
 <br>
 
