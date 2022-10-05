@@ -11,72 +11,8 @@
 
 ## next-auth-mock
 
-**ATTENTION:** To use this library currently you need to install a version from [Next-Auth](https://github.com/nextauthjs/next-auth) later than currently published release **4.12.2**. Otherwise the necessary `SessionContext` is not exported and available. Checkout the [commit](https://github.com/nextauthjs/next-auth/commit/97feae791630e0f38e3e26b3bd70cc77e94b3eda) from [PR #5438](https://github.com/nextauthjs/next-auth/pull/5438).
-
-The next steps are only necessary until a new release of next-auth will be published by them!
-
 <br>
 
-
-### Prepare for next-auth while release <= 4.12.2
-
-Get next-auth from github and build yourself:
-
-```bash
-cd /my-work-folder/
-
-git clone https://github.com/nextauthjs/next-auth.git
-
-cd ./next-auth
-
-# get the commit from PR
-git checkout 97feae791630e0f38e3e26b3bd70cc77e94b3eda
-
-pnpm install
-
-pnpm build
-```
-
-Now you have a working self-build release of next-auth.
-
-<br>
-
-
-### Get this mock library and build while <= next-auth@4.12.2
-
-```bash
-cd /my-work-folder/
-
-git clone https://github.com/TomFreudenberg/next-auth-mock.git
-
-cd ./next-auth-mock
-
-pnpm install
-```
-
-<br>
-
-
-### IMPORTANT to link the next-auth self build library
-
-You have to link the self built next-auth library to this component as well as to your app to replace the "outdated" 4.12.2 release.
-
-```bash
-cd /my-work-folder/next-auth-mock
-
-pnpm link ../next-auth/packages/next-auth
-
-cd /my-app/
-
-pnpm link /my-work-folder/next-auth/packages/next-auth
-```
-
-_Please check pathes to be correct for your system and environment_
-
-<br>
-
-
-## Using next-auth-mock
 
 ### Installation
 
@@ -88,36 +24,30 @@ pnpm add --save-dev @tomfreudenberg/next-auth-mock
 
 <br>
 
-### Include into storybook preview
 
-Update your `.storybook/preview.js`:
+## Storybook
+
+<br>
+
+### Add to your storybook preview
+
+Update `.storybook/preview.js`:
 
 ```js
-import SessionContextProvider from '@tomfreudenberg/next-auth-mock';
-import { mockPreviewAuthentications, mockPreviewAuthenticationsToolbar } from '@tomfreudenberg/next-auth-mock/storybook';
+import { mockAuthPreviewToolbarItem, withMockAuth } from '@tomfreudenberg/next-auth-mock/storybook';
 
 export const globalTypes = {
-  appAuthenticated: mockPreviewAuthenticationsToolbar()
+  ...mockAuthPreviewToolbarItem()
 };
 
-const withAuthProvider = (Story, context) => {
-  const session = mockPreviewAuthentications[context.globals.appAuthenticated]?.session;
-
-  return (
-    <SessionContextProvider session={session}>
-      <Story {...context} />
-    </SessionContextProvider>
-  );
-};
-
-export const decorators = [withAuthProvider];
+export const decorators = [withMockAuth];
 ```
 
 <br>
 
-### Toolbar integration
+### Use toolbar menu
 
-After restarting your storybook, an icon will appear in the toolbar:
+After restarting your storybook, an additional icon will appear in the toolbar:
 
 <img width="191" alt="image" src="https://user-images.githubusercontent.com/410087/193901653-12114ea3-9a4c-4d93-ac93-46576a2409e6.png">
 
@@ -126,7 +56,7 @@ That allows to select the session state.
 <br>
 
 
-## Writing stories and include your components
+### Write stories and include your components
 
 ```jsx
 // ./stories/pages/denied.stories.jsx
@@ -143,6 +73,8 @@ export const DeniedPageStory = (args) => <DeniedPage />;
 DeniedPageStory.parameters = {};
 ```
 
+<br>
+
 You may now control and test your component state of `useSession()` by the toolbar items:
 
 ![next-auth-mock-storybook-preview](https://user-images.githubusercontent.com/410087/193903296-0c0ba17d-0c81-4034-afb2-36f5214ad5bc.gif)
@@ -150,14 +82,14 @@ You may now control and test your component state of `useSession()` by the toolb
 <br>
 
 
-## Using a fix state to test a component
+### Use a fix state to test a component
 
 To make sure that your component may be tested with a fixed auth state regardless the the toolbar selection, you may overwrite the session properties:
 
 ```jsx
 // ./stories/pages/signin.stories.jsx
 
-import SessionContextProvider from '@tomfreudenberg/next-auth-mock';
+import MockSessionContext from '@tomfreudenberg/next-auth-mock';
 import { useSession } from 'next-auth/react';
 
 import SigninPage from '@/pages/auth/signin';
@@ -174,16 +106,43 @@ export const SigninPageStory = (props) => {
   // enforce no session to make sure that the SigninPage will be shown (not authenticated)
   current_session.status = 'unauthenticated';
 
-  // overrule the main SessionContextProvider with updated settings
+  // overrule the main MockSessionContext with updated settings
   return (
-    <SessionContextProvider session={current_session}>
+    <MockSessionContext session={current_session}>
       <SigninPage />
-    </SessionContextProvider>
+    </MockSessionContext>
   );
 }
 
 SigninPageStory.parameters = {};
 ```
+
+<br>
+
+
+### Customize toolbar icon and items
+
+The additional toolbar entry could be completely customized. Just set the options to `mockAuthPreviewToolbarItem()` as you like.
+
+```js
+export const mockAuthPreviewToolbarItem = ({
+  name = 'mockAuthState',
+  description = 'Set authentication state',
+  defaultValue = null,
+  icon = 'user',
+  items = mockAuthStates
+} = {}) => ...
+```
+
+Let's change the language of the description as an example:
+
+```js
+export const globalTypes = {
+  ...mockAuthPreviewToolbarItem({ description: 'Auswahl Anmeldestatus')
+};
+```
+
+If you like to change the given states, just clone and change or rewrite the `mockAuthStates` at [@tomfreudenberg/next-auth-mock](https://github.com/TomFreudenberg/next-auth-mock/blob/df5f1a55e82fca8a182402b39c1ec216f47758a7/src/index.js#L7-L80)
 
 <br>
 
