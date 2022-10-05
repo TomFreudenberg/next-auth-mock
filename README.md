@@ -100,8 +100,8 @@ export default {
 };
 
 export const SigninPageStory = (props) => {
-  // get values from current session set by globalTypes
-  const current_session = useSession();
+  // clone values from current session set by globalTypes
+  const current_session = { ...useSession() };
 
   // enforce no session to make sure that the SigninPage will be shown (not authenticated)
   current_session.status = 'unauthenticated';
