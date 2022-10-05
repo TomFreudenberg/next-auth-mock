@@ -1,7 +1,6 @@
 {
   "name": "@tomfreudenberg/next-auth-mock",
-  "version": "0.1.1",
-  "private": false,
+  "version": "0.3.1",
   "description": "Next-Auth mockup provider for jest, storybook and others.",
   "main": "src/index.js",
   "exports": {
@@ -28,9 +27,9 @@
   },
   "homepage": "https://github.com/TomFreudenberg/next-auth-mock#readme",
   "dependencies": {
-    "next-auth": "4.12.2",
-    "prop-types": "15.8.1",
-    "react": "18.2.0"
+    "next-auth": "^4.12.3",
+    "prop-types": "^15",
+    "react": "^18"
   },
   "devDependencies": {
   }
