@@ -1,6 +1,6 @@
 <h3 align="center">Next-Auth Mockup</h3>
 <p align="center">
-  <strong>Some helpful tools to test and write stories for your Next-Auth NextJS application.</strong>
+  <strong>Some helpful tools to test and write stories for your [NextAuth.js](https://next-auth.js.org/) [NextJS](https://nextjs.org/) application.</strong>
 </p>
 <p align="center">
 -- use it with nodejs and jest, storybook, cypress, others --
