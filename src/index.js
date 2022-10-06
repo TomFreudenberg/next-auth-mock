@@ -1,7 +1,5 @@
-import React from 'react';
-
 import PropTypes from 'prop-types';
-
+import { useMemo } from 'react';
 import { SessionContext } from 'next-auth/react';
 
 /**
@@ -85,10 +83,15 @@ export const mockAuthStates = {
  *
  */
 const MockSessionContext = ({ children, session }) => {
-  const value = React.useMemo(() => {
+  const value = useMemo(() => {
     return session ? session : { data: undefined, status: "unauthenticated" };
   }, [session]);
-  return React.createElement(SessionContext.Provider, { value: value }, children);
+
+  return (
+    <SessionContext.Provider value={value}>
+      {children}
+    </SessionContext.Provider>
+  );
 }
 
 MockSessionContext.propTypes = {

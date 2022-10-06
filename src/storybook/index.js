@@ -1,5 +1,4 @@
-import React from 'react';
-
+import { useMemo } from 'react';
 import MockSessionContext, { mockAuthStates } from '@tomfreudenberg/next-auth-mock';
 
 /**
@@ -33,9 +32,13 @@ export const mockAuthPreviewToolbarItem = ({
  *
  */
 export const withMockAuth = (Story, context) => {
-  const session = React.useMemo(() => {
+  const session = useMemo(() => {
     return mockAuthStates[context.globals.mockAuthState]?.session;
   }, [context.globals.mockAuthState]);
 
-  return React.createElement(MockSessionContext, { session: session }, React.createElement(Story, context));
+  return (
+    <MockSessionContext session={session}>
+      <Story {...context} />
+    </MockSessionContext>
+  );
 };
