@@ -1,7 +1,7 @@
 {
   "name": "@tomfreudenberg/next-auth-mock",
-  "version": "0.3.2",
-  "description": "Next-Auth mockup provider for jest, storybook and others.",
+  "version": "0.3.3",
+  "description": "NextAuth.js mockup provider for jest, storybook and others.",
   "main": "src/index.js",
   "exports": {
     ".": "./src/index.js",
@@ -15,8 +15,10 @@
     "url": "git+https://github.com/TomFreudenberg/next-auth-mock.git"
   },
   "keywords": [
-    "nextauth",
-    "extjs",
+    "nextauthjs",
+    "nextjs",
+    "jest",
+    "storybook",
     "react",
     "nodejs"
   ],
