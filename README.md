@@ -101,14 +101,14 @@ export default {
 
 export const SigninPageStory = (props) => {
   // clone values from current session set by globalTypes
-  const current_session = { ...useSession() };
+  const mocked_session = { ...useSession() };
 
-  // enforce no session to make sure that the SigninPage will be shown (not authenticated)
-  current_session.status = 'unauthenticated';
+  // enforce unauthenticated to make sure that the SigninPage will be shown (not authenticated)
+  mocked_session.status = 'unauthenticated';
 
-  // overrule the main MockSessionContext with updated settings
+  // overrule the main MockSessionContext with mocked session
   return (
-    <MockSessionContext session={current_session}>
+    <MockSessionContext session={mocked_session}>
       <SigninPage />
     </MockSessionContext>
   );
@@ -143,6 +143,68 @@ export const globalTypes = {
 ```
 
 If you like to change the given states, just clone and change or rewrite the `mockAuthStates` at [@tomfreudenberg/next-auth-mock](https://github.com/TomFreudenberg/next-auth-mock/blob/df5f1a55e82fca8a182402b39c1ec216f47758a7/src/index.js#L7-L80)
+
+<br>
+
+
+## Jest
+
+### Write tests and include your components
+
+```jsx
+// ./tests/pages/signout.stories.jsx
+
+import { render, screen } from '@testing-library/react'
+import { withMockAuth } from '@tomfreudenberg/next-auth-mock/jest';
+import SignoutPage from '@/pages/auth/signoutx';
+
+describe('Pages', () => {
+  describe('Signout', () => {
+    it('should render want to sign out', () => {
+      render(withMockAuth(<SignoutPage />, 'userAuthed'));
+      expect(screen.getByText('Do you want to sign out?'));
+    });
+    it('should render not signed in', () => {
+      render(withMockAuth(<SignoutPage />, 'unknown'));
+      expect(screen.getByText('You are not signed in!'));
+    });
+  });
+});
+```
+
+You may enter the name of an `mockAuthStates` entry as argument for `withMockAuth` or put in a session object.
+
+```jsx
+import { mockAuthStates } from '@tomfreudenberg/next-auth-mock';
+render(withMockAuth(<SignoutPage />, mockAuthStates.userAuthed.session));
+
+// is equal to
+
+render(withMockAuth(<SignoutPage />, 'userAuthed'));
+```
+
+Valid states are: `unknown`, `loading`, `admin`, `adminAuthed`, `user`, `userAuthed`
+
+<br>
+
+
+## Contributing
+
+If you like to contribute to next-auth-mock package or need to use it from source, you have to install the devDependencies and build the dist package.
+
+Just go for:
+
+```bash
+git clone git@github.com:TomFreudenberg/next-auth-mock.git
+
+cd next-auth-mock
+
+pnpm install
+
+pnpm build
+```
+
+Your ideas and PRs are welcome.
 
 <br>
 
