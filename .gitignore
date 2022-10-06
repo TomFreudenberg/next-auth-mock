@@ -18,3 +18,6 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# distribution / build
+/dist
