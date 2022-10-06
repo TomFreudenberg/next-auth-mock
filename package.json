@@ -2,13 +2,14 @@
   "name": "@tomfreudenberg/next-auth-mock",
   "version": "0.3.3",
   "description": "NextAuth.js mockup provider for jest, storybook and others.",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "exports": {
-    ".": "./src/index.js",
-    "./storybook": "./src/storybook"
+    ".": "./dist/index.js",
+    "./jest": "./dist/jest",
+    "./storybook": "./dist/storybook"
   },
   "scripts": {
-    "test": "test"
+    "build": "rm -rf ./dist/* ; babel -d ./dist ./src"
   },
   "repository": {
     "type": "git",
@@ -34,5 +35,9 @@
     "react": "^18"
   },
   "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.19.3",
+    "@babel/preset-env": "^7.19.3",
+    "@babel/preset-react": "^7.18.6"
   }
 }
