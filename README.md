@@ -31,16 +31,12 @@ pnpm add --save-dev @tomfreudenberg/next-auth-mock
 
 ### Add to your storybook preview
 
-Update `.storybook/preview.js`:
+Update `.storybook/main.js` and append to your list of addons:
 
 ```js
-import { mockAuthPreviewToolbarItem, withMockAuth } from '@tomfreudenberg/next-auth-mock/storybook';
-
-export const globalTypes = {
-  ...mockAuthPreviewToolbarItem()
-};
-
-export const decorators = [withMockAuth];
+module.exports = {
+  addons: ['@tomfreudenberg/next-auth-mock/storybook']
+}
 ```
 
 <br>
@@ -51,7 +47,7 @@ After restarting your storybook, an additional icon will appear in the toolbar:
 
 <img width="191" alt="image" src="https://user-images.githubusercontent.com/410087/193901653-12114ea3-9a4c-4d93-ac93-46576a2409e6.png">
 
-That allows to select the session state.
+That allows you to select the session state.
 
 <br>
 
@@ -84,13 +80,12 @@ You may now control and test your component state of `useSession()` by the toolb
 
 ### Use a fix state to test a component
 
-To make sure that your component may be tested with a fixed auth state regardless the the toolbar selection, you may overwrite the session properties:
+To make sure that your component may be tested with a fixed auth state regardless the the toolbar selection, you may overwrite the session properties by using parameters in your stories:
 
 ```jsx
-// ./stories/pages/signin.stories.jsx
+// /stories/pages/signin.stories.jsx
 
-import MockSessionContext from '@tomfreudenberg/next-auth-mock';
-import { useSession } from 'next-auth/react';
+import { AUTH } from '@/imports/consts';
 
 import SigninPage from '@/pages/auth/signin';
 
@@ -99,22 +94,200 @@ export default {
   component: SigninPage
 };
 
-export const SigninPageStory = (props) => {
-  // clone values from current session set by globalTypes
-  const mocked_session = { ...useSession() };
+export const SigninPageStory = (props) => <SigninPage />;
 
-  // enforce unauthenticated to make sure that the SigninPage will be shown (not authenticated)
-  mocked_session.status = 'unauthenticated';
+SigninPageStory.parameters = {
+  nextAuthMock: {
+    session: 'unknown'
+  }
+};
+```
 
-  // overrule the main MockSessionContext with mocked session
-  return (
-    <MockSessionContext session={mocked_session}>
-      <SigninPage />
-    </MockSessionContext>
-  );
+The above will load the session set defined by id `unknown`. You may also define a full session object like:
+
+```js
+SigninPageStory.parameters = {
+  nextAuthMock: {
+    session: {
+      data: {
+        id: 999,
+        login: 'user',
+        role: 'user',
+        roles: ['user'],
+        username: 'User',
+        email: 'user@local'
+      },
+      status: 'unauthenticated'
+    }
+  }
+};
+```
+
+<br>
+
+### Access current session data in stories
+
+If you need to change your stories code while using session values, you may access those by the `useSession` hook.
+
+```jsx
+import { useSession } from 'next-auth/react';
+
+export const MyStory = (props) => {
+  // get access to current session data
+  const session = useSession();
+
+  ...
+```
+
+<br>
+
+
+### Customize session auth states
+
+This component brings a default set of auth states: `unknown`, `loading`, `admin`, `adminAuthed`, `user`, `userAuthed`.
+
+<details>
+  <summary>Show default preview mockAuthStates</summary>
+
+```js
+/**
+ *
+ * default items for toolbar menu to select different auth-states while mocking
+ *
+ */
+export const mockAuthStates = {
+  unknown: {
+    title: 'session unknown',
+    session: null
+  },
+  loading: {
+    title: 'session loading',
+    session: {
+      data: null,
+      status: 'loading'
+    }
+  },
+  admin: {
+    title: 'admin not authenticated',
+    session: {
+      data: {
+        id: 1,
+        login: 'admin',
+        role: 'admin',
+        roles: ['admin', 'user'],
+        username: 'Administrator',
+        email: 'admin@local'
+      },
+      status: 'unauthenticated'
+    }
+  },
+  adminAuthed: {
+    title: 'admin authenticated',
+    session: {
+      data: {
+        id: 1,
+        login: 'admin',
+        role: 'admin',
+        roles: ['admin', 'user'],
+        username: 'Administrator',
+        email: 'admin@local'
+      },
+      status: 'authenticated'
+    }
+  },
+  user: {
+    title: 'user not authenticated',
+    session: {
+      data: {
+        id: 999,
+        login: 'user',
+        role: 'user',
+        roles: ['user'],
+        username: 'User',
+        email: 'user@local'
+      },
+      status: 'unauthenticated'
+    }
+  },
+  userAuthed: {
+    title: 'user authenticated',
+    session: {
+      data: {
+        id: 999,
+        login: 'user',
+        role: 'user',
+        roles: ['user'],
+        username: 'User',
+        email: 'user@local'
+      },
+      status: 'authenticated'
+    }
+  }
+};
+```
+
+</details>
+
+This set may be changed completely or in partials for your own needs. Therefore you may create a file in your local folder named `.storybook/previewMockAuthStates.js` and define an alias for webpack.
+
+Update `.storybook/main.js`:
+
+```js
+module.exports = {
+  addons: ['@tomfreudenberg/next-auth-mock/storybook'],
+  webpackFinal: async (config) => {
+    config.resolve.alias['@tomfreudenberg/next-auth-mock/storybook/preview-mock-auth-states'] = path.resolve(__dirname, 'previewMockAuthStates.js');
+  }
+};
+```
+
+Webpack will now load your file `.storybook/previewMockAuthStates.js` for the previewMockAuthStates set:
+
+##### just clone the default states:
+
+```js
+const defaultMockAuthStates = require('@tomfreudenberg/next-auth-mock').mockAuthStates;
+
+module.exports = defaultMockAuthStates;
+```
+
+##### change partial states:
+
+```js
+const defaultMockAuthStates = require('@tomfreudenberg/next-auth-mock').mockAuthStates;
+
+module.exports = {
+  ...defaultMockAuthStates,
+  admin: {
+    title: 'My Admin unauthenticated',
+    session: {
+      data: {
+        id: 777,
+        field: 'Additional session field'
+      }
+    }
+  }
 }
+```
 
-SigninPageStory.parameters = {};
+##### just your own states:
+
+```js
+module.exports = {
+  state0: {
+    title: 'State zero',
+    session: null
+  },
+  state1: {
+    title: 'A State',
+    session: {
+      data: {
+        id: 1,
+        user: 'What you like'
+      }
+    }
+  }
+}
 ```
 
 <br>
@@ -122,27 +295,25 @@ SigninPageStory.parameters = {};
 
 ### Customize toolbar icon and items
 
-The additional toolbar entry could be completely customized. Just set the options to `mockAuthPreviewToolbarItem()` as you like.
+The toolbar entry can also be changhed completely. For that you need to implement manually the decorator in `preview.js` and just set the options to `mockAuthPreviewToolbarItem()` as you like. Attention: Do not add the component to the addons in this case.
+
+Update `.storybook/preview.js`:
 
 ```js
-export const mockAuthPreviewToolbarItem = ({
-  name = 'mockAuthState',
-  description = 'Set authentication state',
-  defaultValue = null,
-  icon = 'user',
-  items = mockAuthStates
-} = {}) => ...
-```
+import { mockAuthPreviewToolbarItem, withMockAuth } from '@tomfreudenberg/next-auth-mock/storybook';
+import { previewMockAuthStates } from '@tomfreudenberg/next-auth-mock/storybook/preview-mock-auth-states';
 
-Let's change the language of the description as an example:
-
-```js
 export const globalTypes = {
-  ...mockAuthPreviewToolbarItem({ description: 'Auswahl Anmeldestatus')
+  ...mockAuthPreviewToolbarItem({
+    description: 'Auswahl Anmeldestatus',
+    defaultValue = null,
+    icon = 'user',
+    items = previewMockAuthStates
+  })
 };
-```
 
-If you like to change the given states, just clone and change or rewrite the `mockAuthStates` at [@tomfreudenberg/next-auth-mock](https://github.com/TomFreudenberg/next-auth-mock/blob/df5f1a55e82fca8a182402b39c1ec216f47758a7/src/index.js#L7-L80)
+export const decorators = [withMockAuth];
+```
 
 <br>
 
