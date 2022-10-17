@@ -1,11 +1,11 @@
-import MockSessionContext, { mockAuthStates } from '@tomfreudenberg/next-auth-mock';
+import MockSessionContext, { mockAuthStates as defaultMockAuthStates } from '@tomfreudenberg/next-auth-mock';
 
 /**
  *
  * Apply the MockSessionContext as decorator to your test.
  *
  */
-export const withMockAuth = (children, session) => {
+export const withMockAuth = (children, session, mockAuthStates = defaultMockAuthStates) => {
   const useSession = (typeof session === 'string') ? mockAuthStates[session]?.session : session;
   return (
     <MockSessionContext session={useSession}>
