@@ -1,5 +1,7 @@
-import { useMemo } from 'react';
-import MockSessionContext, { mockAuthStates } from '@tomfreudenberg/next-auth-mock';
+import MockSessionContext from '@tomfreudenberg/next-auth-mock';
+import previewMockAuthStates from '@tomfreudenberg/next-auth-mock/storybook/preview-mock-auth-states';
+
+import { SB_PARAMETER_KEY } from './constants';
 
 /**
  *
@@ -11,7 +13,7 @@ export const mockAuthPreviewToolbarItem = ({
   description = 'Set authentication state',
   defaultValue = null,
   icon = 'user',
-  items = mockAuthStates
+  items = previewMockAuthStates
 } = {}) => {
   return {
     mockAuthState: {
@@ -32,9 +34,17 @@ export const mockAuthPreviewToolbarItem = ({
  *
  */
 export const withMockAuth = (Story, context) => {
-  const session = useMemo(() => {
-    return mockAuthStates[context.globals.mockAuthState]?.session;
-  }, [context.globals.mockAuthState]);
+
+  // Set a session value for mocking
+  const session = (() => {
+    // Allow overwrite of session value by parameter in story
+    const paramValue = context?.parameters[SB_PARAMETER_KEY];
+    if (typeof paramValue?.session === 'string') {
+      return previewMockAuthStates[paramValue.session]?.session;
+    } else {
+      return paramValue?.session ? paramValue.session : previewMockAuthStates[context.globals.mockAuthState]?.session;
+    }
+  })();
 
   return (
     <MockSessionContext session={session}>
