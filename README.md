@@ -29,6 +29,7 @@ pnpm add --save-dev @tomfreudenberg/next-auth-mock
 
 <br>
 
+
 ### Add to your storybook preview
 
 Update `.storybook/main.js` and append to your list of addons:
@@ -40,6 +41,7 @@ module.exports = {
 ```
 
 <br>
+
 
 ### Use toolbar menu
 
@@ -71,6 +73,7 @@ DeniedPageStory.parameters = {};
 
 <br>
 
+
 You may now control and test your component state of `useSession()` by the toolbar items:
 
 ![next-auth-mock-storybook-preview](https://user-images.githubusercontent.com/410087/193903296-0c0ba17d-0c81-4034-afb2-36f5214ad5bc.gif)
@@ -80,12 +83,10 @@ You may now control and test your component state of `useSession()` by the toolb
 
 ### Use a fix state to test a component
 
-To make sure that your component may be tested with a fixed auth state regardless the the toolbar selection, you may overwrite the session properties by using parameters in your stories:
+To make sure that your component may be tested with a fixed auth state regardless the toolbar selection, you may overwrite the session properties by using parameters in your stories:
 
 ```jsx
 // /stories/pages/signin.stories.jsx
-
-import { AUTH } from '@/imports/consts';
 
 import SigninPage from '@/pages/auth/signin';
 
@@ -124,6 +125,7 @@ SigninPageStory.parameters = {
 ```
 
 <br>
+
 
 ### Access current session data in stories
 
@@ -228,6 +230,8 @@ export const mockAuthStates = {
 
 </details>
 
+<br>
+
 This set may be changed completely or in partials for your own needs. Therefore you may create a file in your local folder named `.storybook/previewMockAuthStates.js` and define an alias for webpack.
 
 Update `.storybook/main.js`:
@@ -243,6 +247,8 @@ module.exports = {
 
 Webpack will now load your file `.storybook/previewMockAuthStates.js` for the previewMockAuthStates set:
 
+<br>
+
 ##### just clone the default states:
 
 ```js
@@ -250,6 +256,8 @@ const defaultMockAuthStates = require('@tomfreudenberg/next-auth-mock').mockAuth
 
 module.exports = defaultMockAuthStates;
 ```
+
+<br>
 
 ##### change partial states:
 
@@ -269,6 +277,8 @@ module.exports = {
   }
 }
 ```
+
+<br>
 
 ##### just your own states:
 
@@ -295,7 +305,7 @@ module.exports = {
 
 ### Customize toolbar icon and items
 
-The toolbar entry can also be changhed completely. For that you need to implement manually the decorator in `preview.js` and just set the options to `mockAuthPreviewToolbarItem()` as you like. Attention: Do not add the component to the addons in this case.
+The toolbar entry can also be changed completely. For that you need to implement manually the decorator in `preview.js` and just set the options to `mockAuthPreviewToolbarItem()` as you like. Attention: Do not add the component to the addons in this case.
 
 Update `.storybook/preview.js`:
 
@@ -327,7 +337,7 @@ export const decorators = [withMockAuth];
 
 import { render, screen } from '@testing-library/react'
 import { withMockAuth } from '@tomfreudenberg/next-auth-mock/jest';
-import SignoutPage from '@/pages/auth/signoutx';
+import SignoutPage from '@/pages/auth/signout';
 
 describe('Pages', () => {
   describe('Signout', () => {
