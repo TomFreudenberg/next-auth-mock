@@ -22,6 +22,7 @@
     "nextjs",
     "jest",
     "storybook",
+    "storybook-addons",
     "react",
     "nodejs"
   ],
@@ -31,6 +32,11 @@
     "url": "https://github.com/TomFreudenberg/next-auth-mock/issues"
   },
   "homepage": "https://github.com/TomFreudenberg/next-auth-mock#readme",
+  "storybook": {
+    "displayName": "NextAuth.js Mock",
+    "supportedFrameworks": ["react"],
+    "icon": "https://next-auth.js.org/img/undraw_authentication.svg"
+  },
   "dependencies": {
     "next-auth": "^4.12.3",
     "prop-types": "^15",
