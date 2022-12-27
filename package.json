@@ -34,18 +34,22 @@
   "homepage": "https://github.com/TomFreudenberg/next-auth-mock#readme",
   "storybook": {
     "displayName": "NextAuth.js Mock",
-    "supportedFrameworks": ["react"],
+    "supportedFrameworks": [
+      "react"
+    ],
     "icon": "https://next-auth.js.org/img/undraw_authentication.svg"
-  },
-  "dependencies": {
-    "next-auth": "^4.12.3",
-    "prop-types": "^15",
-    "react": "^18"
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",
     "@babel/core": "^7.19.3",
     "@babel/preset-env": "^7.19.3",
-    "@babel/preset-react": "^7.18.6"
+    "@babel/preset-react": "^7.18.6",
+    "next-auth": "^4.12.3",
+    "prop-types": "^15",
+    "react": "^18"
+  },
+  "peerDependencies": {
+    "next-auth": "^4.12.3",
+    "react": "^18.0.0"
   }
 }
