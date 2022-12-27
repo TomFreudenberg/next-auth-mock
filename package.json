@@ -1,6 +1,6 @@
 {
   "name": "@tomfreudenberg/next-auth-mock",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "description": "NextAuth.js mockup provider for jest, storybook and others.",
   "main": "dist/index.js",
   "exports": {
@@ -50,6 +50,6 @@
   },
   "peerDependencies": {
     "next-auth": "^4.12.3",
-    "react": "^18.0.0"
+    "react": "^18"
   }
 }
